@@ -4,14 +4,15 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-const http = require('http');
+const http = require('http'); //1 importation du module http
 
-require('dotenv').config(); 
+require('dotenv').config();
 
-const { connectToMongoDB } = require('./db/db');
+//const { connectToMongoDB } = require('./db/db');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/usersRouter');
+//var usersRouter = require('./routes/usersRouter');
+//var carRouter = require('./routes/carRouter');
 
 var app = express();
 
@@ -22,9 +23,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
+app.use('/index', indexRouter);
+//app.use('/users', usersRouter);
+//app.use('/cars', carRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -37,12 +38,14 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
+  res.status(err.status || 500)
   res.json('error');
 });
 
-const server = http.createServer(app);
-server.listen(5000, () => {
-  connectToMongoDB();
-  console.log('server is running on port 5000'); 
+const server = http.createServer(app); //2 creation du serveur
+
+//3 le serveur ecoute sur le port 5000
+server.listen(process.env.Port, () => {
+ // connectToMongoDB();
+  console.log('Server is running on port 5000');
 });
